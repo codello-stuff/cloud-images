@@ -11,5 +11,5 @@ touch "$OVERLAY_MOUNT_POINT"/opt/vyatta/etc/config/.vyatta_config
 mv "$FILES_PATH"/config.boot "$OVERLAY_MOUNT_POINT"/opt/vyatta/etc/config/config.boot
 chmod 755 "$OVERLAY_MOUNT_POINT"/opt/vyatta/etc/config/config.boot
 
-mv "$FILES_PATH"/persistence.conf "$PERSISTENCE_MOUNT_POINT"/persistence.conf
-chmod 644 "$PERSISTENCE_MOUNT_POINT"/persistence.conf
+mv "$FILES_PATH"/persistence.conf "$DISK_MOUNT_POINT"/persistence.conf
+chmod 644 "$DISK_MOUNT_POINT"/persistence.conf
