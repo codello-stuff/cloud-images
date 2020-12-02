@@ -1,13 +1,14 @@
 #!/usr/bin/env sh
-
 set -eu
 
-# We will create three partitions:
+# This script formats the hard drive and partitions it. We will create three
+# partitions:
 # - An empty BIOS partition (otherwise GRUB complains)
 # - An EFI partition
 # - A Linux Filesystem partition
 # Currently Hetzner Cloud only uses BIOS boots so the EFI partition is pretty
-# useless.
+# useless...
+# See: https://www.reddit.com/r/hetzner/comments/hpsop8/hetzner_cloud_server_os_boot_uefi_or_bios/fy53gpc/
 sgdisk --zap-all \
        --set-alignment=1 \
        --new=1:34:2047 \

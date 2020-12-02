@@ -1,6 +1,10 @@
 #!/usr/bin/env sh
-
 set -eu
+
+# This script performs the following configuration:
+# - Language & locale settings
+# - The default VyOS configuration
+# - A boot persistence configuration
 
 # Install english language
 chroot "$OVERLAY_MOUNT_POINT" sed -i '/^# en_US.UTF-8 UTF-8$/s/^# //' /etc/locale.gen

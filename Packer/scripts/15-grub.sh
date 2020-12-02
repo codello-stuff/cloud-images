@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
-
 set -eu
+
+# This script install the GRUB bootloader for VyOS. The boot loader is installed
+# into /boot and /boot/efi respectively. GRUB is configured to only show a
+# single boot option.
 
 mkdir -p "$OVERLAY_MOUNT_POINT"/boot/efi
 mount --bind "$EFI_MOUNT_POINT" "$OVERLAY_MOUNT_POINT"/boot/efi

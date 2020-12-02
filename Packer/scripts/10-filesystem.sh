@@ -1,6 +1,17 @@
 #!/usr/bin/env sh
-
 set -eu
+
+# This script creates and mounts the base filesystem of VyOS so that we can
+# install additional software (such as the boot loader). The VyOS filesystem
+# works like this:
+# - A readonly squashfs file system forms the immutable base of the system. The
+#   image resides on the main partition.
+# - A read-write filesystem is overlayed on top of the squashfs system to allow
+#   changes. The overlay is mounted at / so that the actual partition's file
+#   system is hidden.
+# - The actual partition's file system is mounted at /boot inside the overlay
+#   (e.g. to be able to install the boot loader).
+# - /dev, /proc, and /sys are mounted into the overlay so that chroot works.
 
 apt-get install -y squashfuse fuse-overlayfs
 
@@ -20,6 +31,8 @@ fuse-overlayfs -o lowerdir="$SQUASH_MOUNT_POINT" \
                -o workdir="$dest/work" \
                "$OVERLAY_MOUNT_POINT"
 
+# The following system directories are required for chroot to work. Without
+# these there are a lot of strange errors.
 mount --bind /dev "$OVERLAY_MOUNT_POINT"/dev
 mount --bind /proc "$OVERLAY_MOUNT_POINT"/proc
 mount --bind /sys "$OVERLAY_MOUNT_POINT"/sys

@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
-
 set -eu
+
+# We use fstrim to clean the filesystem and unmount everything cleanly before
+# shutting down.
 
 fstrim "$OVERLAY_MOUNT_POINT"/boot
 fstrim "$DISK_MOUNT_POINT"
