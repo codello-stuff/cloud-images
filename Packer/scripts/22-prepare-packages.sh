@@ -7,6 +7,14 @@ set -eu
 # Configure the nameservers of the rescue system temporarily
 cp "$OVERLAY_MOUNT_POINT"/etc/resolv.conf /tmp/resolv.conf.bak
 cp /etc/resolv.conf "$OVERLAY_MOUNT_POINT"/etc/resolv.conf
-mv "$FILES_PATH"/debian.list "$OVERLAY_MOUNT_POINT"/etc/apt/sources.list.d/debian.list
+tee "$OVERLAY_MOUNT_POINT/etc/apt/sources.list.d/debian.list" <<-EOF > /dev/null
+deb http://deb.debian.org/debian buster main contrib non-free
+deb-src http://deb.debian.org/debian buster main contrib non-free
+deb http://security.debian.org/debian-security/ buster/updates main contrib non-free
+deb-src http://security.debian.org/debian-security/ buster/updates main contrib non-free
+deb http://deb.debian.org/debian buster-updates main contrib non-free
+deb-src http://deb.debian.org/debian buster-updates main contrib non-free
+deb http://dev.packages.vyos.net/repositories/current current main
+EOF
 
 chroot "$OVERLAY_MOUNT_POINT" apt-get update -y

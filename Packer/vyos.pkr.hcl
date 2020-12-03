@@ -63,22 +63,12 @@ source "hcloud" "vyos" {
   }
 }
 
-locals {
-  files_path = "/tmp/vyos-files"
-}
-
 build {
   sources = ["source.hcloud.vyos"]
-  provisioner "file" {
-    source      = "files"
-    destination = local.files_path
-  }
   provisioner "shell" {
     environment_vars = [
       # The VyOS ISO image used to install VyOS.
       "ISO_URL=https://downloads.vyos.io/rolling/current/amd64/vyos-${var.version == "latest" ? "rolling-latest" : var.version + "-amd64"}.iso",
-      # Static files used during provisioning.
-      "FILES_PATH=${local.files_path}",
       # The device on which VyOS is installed.
       "DEVICE=/dev/sda",
       # The mount point of the ISO image.

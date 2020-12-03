@@ -21,8 +21,21 @@ chroot "$OVERLAY_MOUNT_POINT" grub-install --no-floppy \
                                            --bootloader-id='VyOS' \
                                            --no-uefi-secure-boot
 
-export VERSION=$(cat "$SQUASH_MOUNT_POINT/opt/vyatta/etc/version" | awk '{print $2}' | tr + -)
-cat "$FILES_PATH"/grub.cfg | envsubst > "$DISK_MOUNT_POINT"/boot/grub/grub.cfg
+version=$(cat "$SQUASH_MOUNT_POINT/opt/vyatta/etc/version" | awk '{print $2}' | tr + -)
+tee "$DISK_MOUNT_POINT/boot/grub/grub.cfg" <<-EOF > /dev/null
+set default=0
+set timeout=5
+serial --unit=0
+terminal_output --append serial
+terminal_input serial console
+insmod efi_gop
+insmod efi_uga
+
+menuentry "VyOS $version" {
+	linux /boot/$version/vmlinuz boot=live rootdelay=5 noautologin net.ifnames=0 biosdevname=0 vyos-union=/boot/$version console=ttyS0 console=tty0
+	initrd /boot/$version/initrd.img
+}
+EOF
 chmod 644 "$DISK_MOUNT_POINT"/boot/grub/grub.cfg
 
 umount "$OVERLAY_MOUNT_POINT"/boot/efi

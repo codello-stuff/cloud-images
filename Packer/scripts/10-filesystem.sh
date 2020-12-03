@@ -19,7 +19,7 @@ mkdir -p "$SQUASH_MOUNT_POINT"
 squashfuse "$ISO_MOUNT_POINT/live/filesystem.squashfs" "$SQUASH_MOUNT_POINT"
 
 version=$(cat "$SQUASH_MOUNT_POINT/opt/vyatta/etc/version" | awk '{print $2}' | tr + -)
-dest="$DISK_MOUNT_POINT/boot/$version/"
+dest="$DISK_MOUNT_POINT/boot/$version"
 
 mkdir -p "$dest" "$dest/grub" "$dest/rw" "$dest/work" "$OVERLAY_MOUNT_POINT"
 
