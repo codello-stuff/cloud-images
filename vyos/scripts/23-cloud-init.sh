@@ -5,6 +5,9 @@ set -eu
 # cloud-init. VyOS provides a custom implementation that can configure a VyOS
 # system correctly (using the VyOS config file).
 
+# In addition to the default cloud-init capabilities we perform some
+# modifications to support vbash scripts.
+
 chroot "$OVERLAY_MOUNT_POINT" apt-get -t current install -y cloud-init cloud-utils
 
 mkdir -p "$OVERLAY_MOUNT_POINT/etc/systemd/system/cloud-final.service.d"
@@ -19,13 +22,12 @@ chmod 644 "$OVERLAY_MOUNT_POINT/etc/systemd/system/cloud-final.service.d/overrid
 
 mkdir -p "$OVERLAY_MOUNT_POINT"/etc/cloud/cloud.cfg.d
 chmod 755 "$OVERLAY_MOUNT_POINT"/etc/cloud/cloud.cfg.d
-tee "$OVERLAY_MOUNT_POINT"/etc/cloud/cloud.cfg.d/90_dpkg.cfg <<-EOF > /dev/null
-datasource_list: [Hetzner, None]
-
+tee "$OVERLAY_MOUNT_POINT"/etc/cloud/cloud.cfg.d/90_custom.cfg <<-EOF > /dev/null
 cloud_config_modules:
   - vyos
   - write_files
   - runcmd
+  - vyos_userdata
 
 cloud_final_modules:
   - scripts_user
