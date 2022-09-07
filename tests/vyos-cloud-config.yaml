@@ -1,0 +1,15 @@
+#cloud-config
+
+preserve_hostname: false
+hostname: vyos-test
+
+ssh_deletekeys: true
+disable_root: true
+
+users:
+  - default
+  - name: test
+    passwd: Blaberkopf2
+  - name: kim
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINVvsVmgY3EqguKycj+/GFoWXbSTsl+lQku6/idNqAMd kim@Kims-MacBook-Pro
